@@ -56,5 +56,52 @@
     }
   };
 
+
+  $('.container button').on('click', function(e) {
+    e.preventDefault();
+    var searchInput = $('#search').val();
+
+    if (searchInput === '') {
+      return;
+    }
+    $.getJSON('http://www.omdbapi.com/?s=' + searchInput)
+      .done(function(data) {
+        movies = [];
+        $.each(data.Search, function() {
+          var thisMovie = {};
+
+          // $.getJSON('http://www.omdbapi.com/?i=' + this.imdbID + '&plot=full&r=json')
+          //   .done(function(data) {
+          //   thisMovie.plot = data.Plot;
+          //   console.log(thisMovie);
+          //
+          //
+          // });
+
+          thisMovie.id = this.imdbID;
+          thisMovie.title = this.Title;
+          thisMovie.year = this.Year;
+
+          if (this.Poster=== "N/A") {
+            thisMovie.poster = "noposter.jpg";
+          } else {
+            thisMovie.poster = this.Poster;
+          };
+
+          movies.push(thisMovie);
+
+        });
+        $('#search').val('');
+        console.log(movies);
+        renderMovies();
+
+      })
+      .fail(function() {
+        console.log( "error" );
+      });
+
+  });
+
+
   // ADD YOUR CODE HERE
 })();
