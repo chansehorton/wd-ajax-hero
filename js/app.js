@@ -70,31 +70,27 @@
         $.each(data.Search, function() {
           var thisMovie = {};
 
-          // $.getJSON('http://www.omdbapi.com/?i=' + this.imdbID + '&plot=full&r=json')
-          //   .done(function(data) {
-          //   thisMovie.plot = data.Plot;
-          //   console.log(thisMovie);
-          //
-          //
-          // });
+          $.getJSON('http://www.omdbapi.com/?i=' + this.imdbID + '&plot=full&r=json')
+            .done(function(data) {
+            thisMovie.plot = data.Plot;
+
+            movies.push(thisMovie);
+            renderMovies();
+
+          });
 
           thisMovie.id = this.imdbID;
           thisMovie.title = this.Title;
           thisMovie.year = this.Year;
 
-          if (this.Poster=== "N/A") {
+          if (this.Poster === "N/A") {
             thisMovie.poster = "noposter.jpg";
           } else {
             thisMovie.poster = this.Poster;
           };
-
-          movies.push(thisMovie);
-
         });
-        $('#search').val('');
-        console.log(movies);
-        renderMovies();
 
+        $('#search').val('');
       })
       .fail(function() {
         console.log( "error" );
